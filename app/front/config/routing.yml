@@ -11,7 +11,6 @@ sonata_demo:
 sonata_qa:
     resource: "@SonataQABundle/Resources/config/routing/qa.xml"
 
-
 sonata_user_security:
     resource: "@SonataUserBundle/Resources/config/routing/sonata_security_1.xml"
 
@@ -51,10 +50,6 @@ sonata_media_media:
     resource: '@SonataMediaBundle/Resources/config/routing/media.xml'
     prefix: /media
 
-sonata_media_pixlr:
-    resource: '@SonataMediaBundle/Resources/config/routing/pixlr.xml'
-    prefix: /admin/media
-
 sonata_customer:
     resource: @SonataCustomerBundle/Resources/config/routing/customer.xml
     prefix: /shop/user
@@ -87,20 +82,21 @@ blog:
     resource: '@SonataNewsBundle/Resources/config/routing/news.xml'
     prefix: /blog
 
-admin:
-    resource: '@SonataAdminBundle/Resources/config/routing/sonata_admin.xml'
-    prefix: /admin
-
-_sonata_admin:
-    resource: .
-    type: sonata_admin
-    prefix: /admin
-
-soanata_user_admin:
-    resource: '@SonataUserBundle/Resources/config/routing/admin_security.xml'
-    prefix: /admin
-
 # Support for LiipImagineBundle
 #_imagine:
 #    resource: .
 #    type:     imagine
+
+# cross links between kernels
+sonata_admin_dashboard:
+    path: /admin
+
+admin_sonata_page_page_edit:
+    path: /admin/sonata/page/page/{id}/edit
+
+admin_sonata_page_page_snapshot_create:
+    path: /admin/sonata/page/page/{id}/snapshot/create
+
+admin_sonata_page_page_list:
+    path: /admin/sonata/page/page/list
+

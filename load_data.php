@@ -11,7 +11,9 @@
 
 $rootDir = __DIR__;
 
-require_once __DIR__.'/app/bootstrap.php.cache';
+require_once __DIR__ . '/app/bootstrap.php.cache';
+
+use Symfony\Component\Console\Output\OutputInterface;
 
 // reset data
 $fs = new \Symfony\Component\Filesystem\Filesystem;
@@ -23,7 +25,7 @@ if (is_file(__DIR__.'/../parameters.demo.yml')) {
 }
 
 if (!is_file(__DIR__.'/app/config/parameters.yml')) {
-    $output->writeln('<error>no default app/config/parameters.yml file</error>');
+    $output->writeln('<error>no default apps/config/parameters.yml file</error>');
 
     exit(1);
 }
@@ -40,7 +42,7 @@ function execute_commands($commands, $output)
         $p = new \Symfony\Component\Process\Process($command);
         $p->setTimeout(null);
         $p->run(function($type, $data) use ($output) {
-            $output->write($data);
+            $output->write($data, false, OutputInterface::OUTPUT_RAW);
         });
 
         if (!$p->isSuccessful()) {
@@ -58,22 +60,24 @@ $output->writeln("<info>Resetting demo</info>");
 $fs->remove(sprintf('%s/web/uploads/media', $rootDir));
 $fs->mkdir(sprintf('%s/web/uploads/media', $rootDir));
 
-$fs->copy(__DIR__.'/src/Sonata/Bundle/DemoBundle/DataFixtures/data/robots.txt', __DIR__.'/web/robots.txt', true);
+$fs->copy(__DIR__.'/src/Sonata/Bundle/DemoBundle/DataFixtures/data/robots.txt', __DIR__.'/web/app/robots.txt', true);
 
 $success = execute_commands(array(
-    'rm -rf app/cache/*',
-    'app/console cache:warmup --env=prod --no-debug',
-    'app/console cache:create-cache-class --env=prod --no-debug',
-    'app/console doctrine:database:drop --force',
-    'app/console doctrine:database:create',
-    'app/console doctrine:schema:update --force',
-    'app/console doctrine:fixtures:load --verbose',
-    'app/console sonata:page:update-core-routes --site=all --no-debug',
-    'app/console sonata:page:create-snapshots --site=all --no-debug',
-    'app/console assets:install --symlink web',
-    'app/console cache:create-cache-class --env=prod --no-debug',
-    'app/console sonata:admin:setup-acl',
-    'php -d memory_limit=1024M app/console sonata:admin:generate-object-acl'
+    'rm -rf ./cache/*',
+
+    './sonata all cache:warmup --env=prod --no-debug',
+    './sonata all cache:warmup --env=dev --no-debug',
+    './sonata admin cache:create-cache-class --env=prod --no-debug',
+    './sonata admin doctrine:database:drop --force',
+    './sonata admin doctrine:database:create',
+    './sonata admin doctrine:schema:update --force',
+    'php -d memory_limit=1024M ./sonata admin doctrine:fixtures:load --verbose --env=dev',
+    './sonata front sonata:page:update-core-routes --site=all --no-debug --base-command="./sonata front"',
+    './sonata front sonata:page:create-snapshots --site=all --no-debug  --base-console="./sonata front"',
+    './sonata all assets:install --symlink web',
+    './sonata admin sonata:admin:setup-acl',
+
+    'php -d memory_limit=1024M ./app/console sonata:admin:generate-object-acl'
 ), $output);
 
 if (!$success) {
