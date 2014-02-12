@@ -60,6 +60,7 @@ class AppKernel extends Kernel
             // new Liip\ImagineBundle\LiipImagineBundle(),
 
             new Sonata\MarkItUpBundle\SonataMarkItUpBundle(),
+            new Ivory\CKEditorBundle\IvoryCKEditorBundle(),
 
             new Sonata\AdminBundle\SonataAdminBundle(),
             new Sonata\DoctrineORMAdminBundle\SonataDoctrineORMAdminBundle(),
@@ -92,6 +93,9 @@ class AppKernel extends Kernel
             new Application\Sonata\ProductBundle\ApplicationSonataProductBundle(),
             new Sonata\PriceBundle\SonataPriceBundle(),
             new JMS\SerializerBundle\JMSSerializerBundle($this),
+            new FOS\CommentBundle\FOSCommentBundle(),
+            new Sonata\CommentBundle\SonataCommentBundle(),
+            new Application\Sonata\CommentBundle\ApplicationSonataCommentBundle(),
 
             // SONATA CORE & HELPER BUNDLES
             new Sonata\EasyExtendsBundle\SonataEasyExtendsBundle(),
@@ -108,6 +112,9 @@ class AppKernel extends Kernel
             new Application\Sonata\NotificationBundle\ApplicationSonataNotificationBundle(),
             new Application\Sonata\SeoBundle\ApplicationSonataSeoBundle(),
 
+            // Search Integration
+            //new FOS\ElasticaBundle\FOSElasticaBundle(),
+
             // CMF Integration
             new Symfony\Cmf\Bundle\RoutingBundle\CmfRoutingBundle(),
 
@@ -120,7 +127,7 @@ class AppKernel extends Kernel
             new Sonata\TimelineBundle\SonataTimelineBundle(),
             new Application\Sonata\TimelineBundle\ApplicationSonataTimelineBundle(), // easy extends integration
 
-            new Ivory\CKEditorBundle\IvoryCKEditorBundle(),
+
 
             new Mopa\Bundle\BootstrapBundle\MopaBootstrapBundle()
         );
